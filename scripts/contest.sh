@@ -17,9 +17,17 @@ if [ ! -e $RUNTIME ]; then
 fi
 
 LOGFILE="${ROOT}/test.log"
+ARCH=$(uname -m)
 
 if [ ! -f ${ROOT}/bundle.tar.gz ]; then
-    cp ${ROOT}/tests/contest/contest/bundle.tar.gz ${ROOT}/bundle.tar.gz
+    if [ "$ARCH" = "x86_64" ]; then
+        cp ${ROOT}/tests/contest/contest/bundle.tar.gz ${ROOT}/bundle.tar.gz
+    elif [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
+        cp ${ROOT}/tests/contest/contest/bundle-arm64.tar.gz ${ROOT}/bundle.tar.gz
+    else
+        echo "no bundle for architecture $ARCH"
+        exit 1
+    fi 
 fi
 touch ${LOGFILE}
 
